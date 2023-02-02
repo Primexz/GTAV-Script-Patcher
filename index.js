@@ -19,4 +19,5 @@ function intToHex(int) {
 
         console.log(`Patched script ${file} ${originalByte} => ${intToHex(patchedByte)}`)
     }
+    console.log(`Patching done. Patched ${files.length} scripts`)
 })()
