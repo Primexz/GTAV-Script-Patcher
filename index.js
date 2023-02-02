@@ -5,8 +5,8 @@ function intToHex(int) {
 }
 
 (async() => {
-    const patchedByte = 0xC
-    const files = await readdir("scripts");
+    const patchedByte = 0xA
+    const files = (await readdir("scripts")).filter(name => name.endsWith(".ysc"));
 
     for await ( const file of files ) {
         const path = `scripts/${file}`
