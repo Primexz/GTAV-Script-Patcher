@@ -1,23 +1,28 @@
-const { readFile, readdir, writeFile } = require('fs/promises');
+const { readdir, open } = require('fs/promises');
 
 function intToHex(int) {
-    return "0x" + int.toString(16)
+    return "0x" + int.toString(16);
 }
 
-(async() => {
-    const patchedByte = 0xA
+(async () => {
+    const patchedByte = 0xA;
+    const patchedByteBuff = Buffer.from([patchedByte]);
+
     const files = (await readdir("scripts")).filter(name => name.endsWith(".ysc"));
 
-    for await ( const file of files ) {
-        const path = `scripts/${file}`
-        const buf = await readFile(path)
+    await Promise.all(files.map(async file => {
+        const path = `scripts/${file}`;
+        const handle = await open(path, "r+");
 
-        const originalByte = intToHex(buf[4])
-        buf[4] = patchedByte
+        const { buffer } = await handle.read(Buffer.alloc(1), 0, 1, 4);
+        const originalByte = intToHex(buffer[0]);
 
-        await writeFile(path, buf)
+        await handle.write(patchedByteBuff, 0, 1, 4);
 
-        console.log(`Patched script ${file} ${originalByte} => ${intToHex(patchedByte)}`)
-    }
-    console.log(`Patching done. Patched ${files.length} scripts`)
-})()
+        await handle.close();
+
+        console.log(`Patched script ${file} ${originalByte} => ${intToHex(patchedByte)}`);
+    }));
+
+    console.log(`Patching done. Patched ${files.length} scripts`);
+})();
