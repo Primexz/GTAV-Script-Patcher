@@ -19,6 +19,8 @@ function intToHex(int) {
 
         await handle.write(patchedByteBuff, 0, 1, 4);
 
+        await handle.close();
+
         console.log(`Patched script ${file} ${originalByte} => ${intToHex(patchedByte)}`);
     }));
 
