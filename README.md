@@ -9,4 +9,4 @@ This application is written in Javascript and accordingly requires Node-JS
 
 1. copy your scripts into the ``scripts`` folder
 2. ``node ./index.js``
-3. after the program has run, you will find the edited scripts again from the **scriüts** folder.
+3. after the program has run, you will find the edited scripts again from the **scripts** folder.
